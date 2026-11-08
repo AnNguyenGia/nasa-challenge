@@ -1,0 +1,30 @@
+name: Test and package
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  backend-ml:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install -r backend/requirements-dev.txt
+      - run: PYTHONPATH=backend:. pytest -q backend/tests ml/test_pipeline.py
+      - run: docker compose --env-file .env.example --profile cloud --profile ai --profile ml config --quiet
+      - run: docker build -f backend/Dockerfile -t nasa-health-backend:${{ github.sha }} .
+      - run: docker save nasa-health-backend:${{ github.sha }} | gzip > backend-image.tar.gz
+      - uses: actions/upload-artifact@v4
+        with: {name: backend-image, path: backend-image.tar.gz}
+  desktop:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm ci
+        working-directory: apps/desktop
+      - run: npm test && npm run dist
+        working-directory: apps/desktop
+      - uses: actions/upload-artifact@v4
+        with: {name: linux-desktop, path: apps/desktop/release/*.AppImage}

@@ -1,0 +1,15 @@
+[Unit]
+Description=Space Health edge modular monolith
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/nasa-challenge
+ExecStart=/usr/bin/docker compose up -d edge
+ExecStop=/usr/bin/docker compose stop edge
+TimeoutStartSec=180
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,7 @@
+# Run Caddy on the cloud Ubuntu host. Set CLOUD_HOST to your owned DNS hostname.
+{$CLOUD_HOST} {
+    request_body {
+        max_size 64KB
+    }
+    reverse_proxy 127.0.0.1:8001
+}

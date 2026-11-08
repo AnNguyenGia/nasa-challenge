@@ -1,0 +1,81 @@
+name: nasa-health
+x-backend: &backend
+  image: nasa-health-backend:${IMAGE_TAG:-local}
+  build:
+    context: .
+    dockerfile: backend/Dockerfile
+  restart: unless-stopped
+  init: true
+  read_only: true
+  tmpfs: [/tmp]
+  security_opt: [no-new-privileges:true]
+  cap_drop: [ALL]
+  healthcheck:
+    test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz')"]
+    interval: 15s
+    timeout: 5s
+    retries: 3
+  logging:
+    driver: json-file
+    options: {max-size: 10m, max-file: '3'}
+services:
+  edge:
+    <<: *backend
+    ports: ["127.0.0.1:8000:8000"]
+    environment:
+      API_TOKEN: ${EDGE_API_TOKEN:?Run scripts/init-env.sh}
+      DB_PATH: /data/edge.db
+      MODEL_DIR: /models
+      NODE_ROLE: edge
+      CLOUD_URL: ${CLOUD_URL:-}
+      CLOUD_API_TOKEN: ${CLOUD_API_TOKEN:-}
+      OLLAMA_URL: http://ollama:11434
+      QWEN_MODEL: ${QWEN_MODEL:-qwen3:4b}
+    volumes: [edge-data:/data, models:/models:ro]
+  cloud:
+    <<: *backend
+    profiles: [cloud]
+    ports: ["127.0.0.1:8001:8000"]
+    environment:
+      API_TOKEN: ${CLOUD_API_TOKEN:?Run scripts/init-env.sh}
+      DB_PATH: /data/cloud.db
+      MODEL_DIR: /models
+      NODE_ROLE: cloud
+    volumes: [cloud-data:/data, models:/models:ro]
+  ollama:
+    image: ollama/ollama:0.6.8
+    profiles: [ai]
+    restart: unless-stopped
+    volumes: [ollama-data:/root/.ollama]
+  trainer:
+    build:
+      context: .
+      dockerfile: ml/Dockerfile
+    profiles: [ml]
+    depends_on:
+      mlflow:
+        condition: service_healthy
+    environment:
+      MODEL_DIR: /models
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+    volumes: [models:/models]
+    command: [python, -m, ml.train]
+  mlflow:
+    build:
+      context: .
+      dockerfile: ml/Dockerfile
+    profiles: [ml]
+    ports: ["127.0.0.1:5000:5000"]
+    volumes: [mlflow-data:/tracking]
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    command: [mlflow, server, --host, 0.0.0.0, --port, '5000', --backend-store-uri, 'sqlite:////tracking/mlflow.db', --artifacts-destination, /tracking/artifacts, --serve-artifacts]
+volumes:
+  edge-data:
+  cloud-data:
+  ollama-data:
+  models:
+  mlflow-data:

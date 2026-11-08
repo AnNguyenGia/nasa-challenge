@@ -1,0 +1,17 @@
+name: Candidate model
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  train-evaluate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install -r backend/requirements-dev.txt
+      - run: PYTHONPATH=backend:. pytest -q ml/test_pipeline.py
+      - run: python -m ml.train
+      - uses: actions/upload-artifact@v4
+        with: {name: candidate-model-review-before-promoting, path: models/}

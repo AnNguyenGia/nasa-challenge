@@ -1,0 +1,21 @@
+import 'fake-indexeddb/auto';
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {enqueue, entries, sync} from '../src/storage.js';
+import {openDB} from 'idb';
+test('durable outbox survives repository re-import; retry drains once', async()=>{
+  await enqueue({id:'persistent-1',heart_rate:72});
+  await assert.rejects(()=>enqueue({id:'persistent-1',heart_rate:90}));
+  const reopened=await import('../src/storage.js?restart=1');
+  assert.equal((await reopened.entries())[0].reading.heart_rate,72);
+  await sync(async()=>({ok:false,status:0}));
+  assert.equal((await entries())[0].state,'pending');
+  const db=await openDB('space-health-v1',1);
+  const row=await db.get('outbox','persistent-1');
+  await db.put('outbox',{...row,retryAt:0});
+  let calls=0;
+  await sync(async(_method,_path,body)=>{calls++;return {ok:true,data:{id:body.id}};});
+  await sync(async()=>{calls++;});
+  assert.equal(calls,1);
+  assert.equal((await entries())[0].state,'sent');
+});

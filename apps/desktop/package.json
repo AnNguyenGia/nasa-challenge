@@ -1,0 +1,45 @@
+{
+  "name": "nasa-health-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "desktop:dev": "concurrently -k \"npm:dev\" \"wait-on http://127.0.0.1:5173 && electron . --dev\"",
+    "build": "vite build",
+    "start": "electron .",
+    "dist": "npm run build && electron-builder --linux AppImage",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "idb": "8.0.2"
+  },
+  "devDependencies": {
+    "vite": "8.3.6",
+    "electron": "45.2.3",
+    "electron-builder": "26.18.0",
+    "concurrently": "9.1.2",
+    "wait-on": "8.0.3",
+    "fake-indexeddb": "6.2.4"
+  },
+  "build": {
+    "appId": "org.spaceapps.health.demo",
+    "productName": "Space Health",
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Science"
+    }
+  }
+}
