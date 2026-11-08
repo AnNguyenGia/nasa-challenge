@@ -1,0 +1,5 @@
+Dataset,Phase,Samples,Percentage
+CBC + Serum,Postflight,16,57.142857142857146
+CBC + Serum,Preflight,12,42.857142857142854
+Plasma Proteomics,Preflight,11,52.38095238095238
+Plasma Proteomics,Postflight,10,47.61904761904762

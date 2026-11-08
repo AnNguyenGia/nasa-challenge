@@ -1,0 +1,30 @@
+Area,Astronaut,Sample,PreVpost_flight,PreVpost,Timepoint,ImmediateVLongTerm
+A5,C001,C001_1,pre-flight 1,Pre-flight,June_Pre,Preflight
+B5,C001,C001_2,pre-flight 2,Pre-flight,Aug_Pre,Preflight
+C5,C001,C001_3,pre-flight 3,Pre-flight,Sept_Pre,Preflight
+D5,C001,C001_4,post-flight 1,Post-flight,Sept_Post,Immediate Postflight
+E5,C001,C001_5,post-flight 2,Post-flight,Nov_Post,Longterm Postflight
+F5,C001,C001_6,post-flight 3,Post-flight,Dec_Post,Longterm Postflight
+G5,C002,C002_1,pre-flight 1,Pre-flight,June_Pre,Preflight
+H5,C002,C002_2,pre-flight 2,Pre-flight,Aug_Pre,Preflight
+i5,C002,C002_3,pre-flight 3,Pre-flight,Sept_Pre,Preflight
+J5,C002,C002_4,post-flight 1,Post-flight,Sept_Post,Immediate Postflight
+K5,C002,C002_5,post-flight 2,Post-flight,Nov_Post,Longterm Postflight
+L5,C002,C002_6,post-flight 3,Post-flight,Dec_Post,Longterm Postflight
+M5,C003,C003_1,pre-flight 1,Pre-flight,June_Pre,Preflight
+N5,C003,C003_2,pre-flight 2,Pre-flight,Aug_Pre,Preflight
+O5,C003,C003_3,pre-flight 3,Pre-flight,Sept_Pre,Preflight
+P5,C003,C003_4,post-flight 1,Post-flight,Sept_Post,Immediate Postflight
+Q5,C003,C003_5,post-flight 2,Post-flight,Nov_Post,Longterm Postflight
+R5,C003,C003_6,post-flight 3,Post-flight,Dec_Post,Longterm Postflight
+S5,C004,C004_1,pre-flight 1,Pre-flight,June_Pre,Preflight
+T5,C004,C004_2,pre-flight 2,Pre-flight,Aug_Pre,Preflight
+U5,C004,C004_3,pre-flight 3,Pre-flight,Sept_Pre,Preflight
+V5,C004,C004_4,post-flight 1,Post-flight,Sept_Post,Immediate Postflight
+W5,C004,C004_5,post-flight 2,Post-flight,Nov_Post,Longterm Postflight
+X5,C004,C004_6,post-flight 3,Post-flight,Dec_Post,Longterm Postflight
+Y5,Ctrl2,Ctrl2,no flight,no flight,Control,Control
+Z5,000-1,000-1,no flight,no flight,Control,Control
+AA5,000-2,000-2,no flight,no flight,Control,Control
+AB5,000-3,000-3,no flight,no flight,Control,Control
+AC5,000-4,000-4,no flight,no flight,Control,Control

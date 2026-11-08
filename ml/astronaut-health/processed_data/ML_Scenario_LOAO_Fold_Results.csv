@@ -1,0 +1,97 @@
+Dataset,Scenario,Model,Held_Out_Astronaut,N_Train,N_Test,Train_Classes,Test_Classes,Fold_Valid,Reason,Accuracy,Balanced_Accuracy,F1
+CBC + Serum,Nhãn gốc,Dummy baseline,C001,21,7,2,2,True,,0.5714285714285714,0.5,0.7272727272727273
+CBC + Serum,Nhãn gốc,Dummy baseline,C002,21,7,2,2,True,,0.5714285714285714,0.5,0.7272727272727273
+CBC + Serum,Nhãn gốc,Dummy baseline,C003,21,7,2,2,True,,0.5714285714285714,0.5,0.7272727272727273
+CBC + Serum,Nhãn gốc,Dummy baseline,C004,21,7,2,2,True,,0.5714285714285714,0.5,0.7272727272727273
+CBC + Serum,Nhãn gốc,Logistic Regression,C001,21,7,2,2,True,,1.0,1.0,1.0
+CBC + Serum,Nhãn gốc,Logistic Regression,C002,21,7,2,2,True,,0.7142857142857143,0.75,0.6666666666666666
+CBC + Serum,Nhãn gốc,Logistic Regression,C003,21,7,2,2,True,,0.5714285714285714,0.5,0.7272727272727273
+CBC + Serum,Nhãn gốc,Logistic Regression,C004,21,7,2,2,True,,0.5714285714285714,0.5,0.7272727272727273
+CBC + Serum,Nhãn gốc,SVM (RBF),C001,21,7,2,2,True,,0.42857142857142855,0.5,0.0
+CBC + Serum,Nhãn gốc,SVM (RBF),C002,21,7,2,2,True,,0.42857142857142855,0.5,0.0
+CBC + Serum,Nhãn gốc,SVM (RBF),C003,21,7,2,2,True,,0.42857142857142855,0.5,0.0
+CBC + Serum,Nhãn gốc,SVM (RBF),C004,21,7,2,2,True,,0.42857142857142855,0.5,0.0
+CBC + Serum,Nhãn gốc,Random Forest,C001,21,7,2,2,True,,0.8571428571428571,0.8333333333333333,0.8888888888888888
+CBC + Serum,Nhãn gốc,Random Forest,C002,21,7,2,2,True,,0.8571428571428571,0.875,0.8571428571428571
+CBC + Serum,Nhãn gốc,Random Forest,C003,21,7,2,2,True,,0.5714285714285714,0.5,0.7272727272727273
+CBC + Serum,Nhãn gốc,Random Forest,C004,21,7,2,2,True,,0.5714285714285714,0.5,0.7272727272727273
+CBC + Serum,Cấp tính,Dummy baseline,C001,12,4,2,2,True,,0.75,0.5,0.0
+CBC + Serum,Cấp tính,Dummy baseline,C002,12,4,2,2,True,,0.75,0.5,0.0
+CBC + Serum,Cấp tính,Dummy baseline,C003,12,4,2,2,True,,0.75,0.5,0.0
+CBC + Serum,Cấp tính,Dummy baseline,C004,12,4,2,2,True,,0.75,0.5,0.0
+CBC + Serum,Cấp tính,Logistic Regression,C001,12,4,2,2,True,,1.0,1.0,1.0
+CBC + Serum,Cấp tính,Logistic Regression,C002,12,4,2,2,True,,1.0,1.0,1.0
+CBC + Serum,Cấp tính,Logistic Regression,C003,12,4,2,2,True,,1.0,1.0,1.0
+CBC + Serum,Cấp tính,Logistic Regression,C004,12,4,2,2,True,,0.75,0.8333333333333333,0.6666666666666666
+CBC + Serum,Cấp tính,SVM (RBF),C001,12,4,2,2,True,,1.0,1.0,1.0
+CBC + Serum,Cấp tính,SVM (RBF),C002,12,4,2,2,True,,1.0,1.0,1.0
+CBC + Serum,Cấp tính,SVM (RBF),C003,12,4,2,2,True,,1.0,1.0,1.0
+CBC + Serum,Cấp tính,SVM (RBF),C004,12,4,2,2,True,,0.75,0.5,0.0
+CBC + Serum,Cấp tính,Random Forest,C001,12,4,2,2,True,,1.0,1.0,1.0
+CBC + Serum,Cấp tính,Random Forest,C002,12,4,2,2,True,,1.0,1.0,1.0
+CBC + Serum,Cấp tính,Random Forest,C003,12,4,2,2,True,,1.0,1.0,1.0
+CBC + Serum,Cấp tính,Random Forest,C004,12,4,2,2,True,,0.75,0.5,0.0
+CBC + Serum,Hồi phục,Dummy baseline,C001,15,5,2,2,True,,0.6,0.5,0.0
+CBC + Serum,Hồi phục,Dummy baseline,C002,15,5,2,2,True,,0.6,0.5,0.0
+CBC + Serum,Hồi phục,Dummy baseline,C003,15,5,2,2,True,,0.6,0.5,0.0
+CBC + Serum,Hồi phục,Dummy baseline,C004,15,5,2,2,True,,0.6,0.5,0.0
+CBC + Serum,Hồi phục,Logistic Regression,C001,15,5,2,2,True,,0.4,0.41666666666666663,0.4
+CBC + Serum,Hồi phục,Logistic Regression,C002,15,5,2,2,True,,0.8,0.75,0.6666666666666666
+CBC + Serum,Hồi phục,Logistic Regression,C003,15,5,2,2,True,,0.2,0.25,0.3333333333333333
+CBC + Serum,Hồi phục,Logistic Regression,C004,15,5,2,2,True,,0.4,0.5,0.5714285714285714
+CBC + Serum,Hồi phục,SVM (RBF),C001,15,5,2,2,True,,0.6,0.5,0.0
+CBC + Serum,Hồi phục,SVM (RBF),C002,15,5,2,2,True,,0.6,0.5,0.0
+CBC + Serum,Hồi phục,SVM (RBF),C003,15,5,2,2,True,,0.6,0.5,0.0
+CBC + Serum,Hồi phục,SVM (RBF),C004,15,5,2,2,True,,0.6,0.5,0.0
+CBC + Serum,Hồi phục,Random Forest,C001,15,5,2,2,True,,0.6,0.5833333333333333,0.5
+CBC + Serum,Hồi phục,Random Forest,C002,15,5,2,2,True,,0.8,0.75,0.6666666666666666
+CBC + Serum,Hồi phục,Random Forest,C003,15,5,2,2,True,,0.6,0.5833333333333333,0.5
+CBC + Serum,Hồi phục,Random Forest,C004,15,5,2,2,True,,0.4,0.5,0.5714285714285714
+Plasma Proteomics,Nhãn gốc,Dummy baseline,C001,16,5,2,2,True,,0.6,0.5,0.0
+Plasma Proteomics,Nhãn gốc,Dummy baseline,C002,16,5,2,2,True,,0.4,0.5,0.0
+Plasma Proteomics,Nhãn gốc,Dummy baseline,C003,16,5,2,2,True,,0.6,0.5,0.0
+Plasma Proteomics,Nhãn gốc,Dummy baseline,C004,15,6,2,2,True,,0.5,0.5,0.0
+Plasma Proteomics,Nhãn gốc,Logistic Regression,C001,16,5,2,2,True,,0.8,0.75,0.6666666666666666
+Plasma Proteomics,Nhãn gốc,Logistic Regression,C002,16,5,2,2,True,,0.4,0.5,0.0
+Plasma Proteomics,Nhãn gốc,Logistic Regression,C003,16,5,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Nhãn gốc,Logistic Regression,C004,15,6,2,2,True,,0.8333333333333334,0.8333333333333333,0.8571428571428571
+Plasma Proteomics,Nhãn gốc,SVM (RBF),C001,16,5,2,2,True,,0.8,0.75,0.6666666666666666
+Plasma Proteomics,Nhãn gốc,SVM (RBF),C002,16,5,2,2,True,,0.4,0.5,0.0
+Plasma Proteomics,Nhãn gốc,SVM (RBF),C003,16,5,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Nhãn gốc,SVM (RBF),C004,15,6,2,2,True,,0.5,0.5,0.6666666666666666
+Plasma Proteomics,Nhãn gốc,Random Forest,C001,16,5,2,2,True,,0.8,0.75,0.6666666666666666
+Plasma Proteomics,Nhãn gốc,Random Forest,C002,16,5,2,2,True,,0.4,0.5,0.0
+Plasma Proteomics,Nhãn gốc,Random Forest,C003,16,5,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Nhãn gốc,Random Forest,C004,15,6,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Cấp tính,Dummy baseline,C001,11,4,2,2,True,,0.75,0.5,0.0
+Plasma Proteomics,Cấp tính,Dummy baseline,C002,12,3,2,2,True,,0.6666666666666666,0.5,0.0
+Plasma Proteomics,Cấp tính,Dummy baseline,C003,11,4,2,2,True,,0.75,0.5,0.0
+Plasma Proteomics,Cấp tính,Dummy baseline,C004,11,4,2,2,True,,0.75,0.5,0.0
+Plasma Proteomics,Cấp tính,Logistic Regression,C001,11,4,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Cấp tính,Logistic Regression,C002,12,3,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Cấp tính,Logistic Regression,C003,11,4,2,2,True,,0.75,0.5,0.0
+Plasma Proteomics,Cấp tính,Logistic Regression,C004,11,4,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Cấp tính,SVM (RBF),C001,11,4,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Cấp tính,SVM (RBF),C002,12,3,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Cấp tính,SVM (RBF),C003,11,4,2,2,True,,0.75,0.5,0.0
+Plasma Proteomics,Cấp tính,SVM (RBF),C004,11,4,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Cấp tính,Random Forest,C001,11,4,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Cấp tính,Random Forest,C002,12,3,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Cấp tính,Random Forest,C003,11,4,2,2,True,,0.75,0.5,0.0
+Plasma Proteomics,Cấp tính,Random Forest,C004,11,4,2,2,True,,0.75,0.5,0.0
+Plasma Proteomics,Hồi phục,Dummy baseline,C001,13,4,2,2,True,,0.75,0.5,0.0
+Plasma Proteomics,Hồi phục,Dummy baseline,C002,13,4,2,2,True,,0.5,0.5,0.0
+Plasma Proteomics,Hồi phục,Dummy baseline,C003,13,4,2,2,True,,0.75,0.5,0.0
+Plasma Proteomics,Hồi phục,Dummy baseline,C004,12,5,2,2,True,,0.6,0.5,0.0
+Plasma Proteomics,Hồi phục,Logistic Regression,C001,13,4,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Hồi phục,Logistic Regression,C002,13,4,2,2,True,,0.5,0.5,0.0
+Plasma Proteomics,Hồi phục,Logistic Regression,C003,13,4,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Hồi phục,Logistic Regression,C004,12,5,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Hồi phục,SVM (RBF),C001,13,4,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Hồi phục,SVM (RBF),C002,13,4,2,2,True,,0.5,0.5,0.0
+Plasma Proteomics,Hồi phục,SVM (RBF),C003,13,4,2,2,True,,0.75,0.8333333333333333,0.6666666666666666
+Plasma Proteomics,Hồi phục,SVM (RBF),C004,12,5,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Hồi phục,Random Forest,C001,13,4,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Hồi phục,Random Forest,C002,13,4,2,2,True,,0.5,0.5,0.0
+Plasma Proteomics,Hồi phục,Random Forest,C003,13,4,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Hồi phục,Random Forest,C004,12,5,2,2,True,,1.0,1.0,1.0

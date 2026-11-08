@@ -1,0 +1,33 @@
+Dataset,Model,Held_Out_Astronaut,N_Train,N_Test,Train_Classes,Test_Classes,Fold_Valid,Reason,Accuracy,Balanced_Accuracy,F1
+CBC + Serum,Dummy baseline,C001,21,7,2,2,True,,0.5714285714285714,0.5,0.7272727272727273
+CBC + Serum,Dummy baseline,C002,21,7,2,2,True,,0.5714285714285714,0.5,0.7272727272727273
+CBC + Serum,Dummy baseline,C003,21,7,2,2,True,,0.5714285714285714,0.5,0.7272727272727273
+CBC + Serum,Dummy baseline,C004,21,7,2,2,True,,0.5714285714285714,0.5,0.7272727272727273
+CBC + Serum,Logistic Regression,C001,21,7,2,2,True,,1.0,1.0,1.0
+CBC + Serum,Logistic Regression,C002,21,7,2,2,True,,0.7142857142857143,0.75,0.6666666666666666
+CBC + Serum,Logistic Regression,C003,21,7,2,2,True,,0.5714285714285714,0.5,0.7272727272727273
+CBC + Serum,Logistic Regression,C004,21,7,2,2,True,,0.5714285714285714,0.5,0.7272727272727273
+CBC + Serum,SVM (RBF),C001,21,7,2,2,True,,0.42857142857142855,0.5,0.0
+CBC + Serum,SVM (RBF),C002,21,7,2,2,True,,0.42857142857142855,0.5,0.0
+CBC + Serum,SVM (RBF),C003,21,7,2,2,True,,0.42857142857142855,0.5,0.0
+CBC + Serum,SVM (RBF),C004,21,7,2,2,True,,0.42857142857142855,0.5,0.0
+CBC + Serum,Random Forest,C001,21,7,2,2,True,,0.8571428571428571,0.8333333333333333,0.8888888888888888
+CBC + Serum,Random Forest,C002,21,7,2,2,True,,0.8571428571428571,0.875,0.8571428571428571
+CBC + Serum,Random Forest,C003,21,7,2,2,True,,0.5714285714285714,0.5,0.7272727272727273
+CBC + Serum,Random Forest,C004,21,7,2,2,True,,0.5714285714285714,0.5,0.7272727272727273
+Plasma Proteomics,Dummy baseline,C001,16,5,2,2,True,,0.6,0.5,0.0
+Plasma Proteomics,Dummy baseline,C002,16,5,2,2,True,,0.4,0.5,0.0
+Plasma Proteomics,Dummy baseline,C003,16,5,2,2,True,,0.6,0.5,0.0
+Plasma Proteomics,Dummy baseline,C004,15,6,2,2,True,,0.5,0.5,0.0
+Plasma Proteomics,Logistic Regression,C001,16,5,2,2,True,,0.8,0.75,0.6666666666666666
+Plasma Proteomics,Logistic Regression,C002,16,5,2,2,True,,0.4,0.5,0.0
+Plasma Proteomics,Logistic Regression,C003,16,5,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Logistic Regression,C004,15,6,2,2,True,,0.8333333333333334,0.8333333333333333,0.8571428571428571
+Plasma Proteomics,SVM (RBF),C001,16,5,2,2,True,,0.8,0.75,0.6666666666666666
+Plasma Proteomics,SVM (RBF),C002,16,5,2,2,True,,0.4,0.5,0.0
+Plasma Proteomics,SVM (RBF),C003,16,5,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,SVM (RBF),C004,15,6,2,2,True,,0.5,0.5,0.6666666666666666
+Plasma Proteomics,Random Forest,C001,16,5,2,2,True,,0.8,0.75,0.6666666666666666
+Plasma Proteomics,Random Forest,C002,16,5,2,2,True,,0.4,0.5,0.0
+Plasma Proteomics,Random Forest,C003,16,5,2,2,True,,1.0,1.0,1.0
+Plasma Proteomics,Random Forest,C004,15,6,2,2,True,,1.0,1.0,1.0

@@ -1,0 +1,8 @@
+Check,Failed,Status,Detail
+Timepoint parse được thành Mission_Day,0,PASS,số dòng không parse được
+Giá trị nằm trong danh sách mốc cho phép,0,PASS,giá trị lạ: []
+Không có Mission_Day = 0,0,PASS,quy ước L-/R+ không có ngày 0
+Không có Mission_Day = -31,0,PASS,-31 từng xuất hiện trên trục X của notebook 575 nhưng không phải mốc hợp lệ
+Tiền tố L-/R+ khớp dấu của Mission_Day,0,PASS,"L phải âm, R phải dương"
+Dấu của Mission_Day khớp Phase,0,PASS,"âm = Preflight, dương = Postflight"
+"Mỗi phi hành gia có đủ 7 mốc, không trùng",0,PASS,phi hành gia thiếu/trùng: []
