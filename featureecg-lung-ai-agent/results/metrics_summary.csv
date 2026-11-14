@@ -1,0 +1,2 @@
+dataset,model,best_epoch,test_loss,accuracy,macro_precision,macro_recall,macro_f1,note
+MIT-BIH ECG Heartbeat,ECG1DCNN,5,0.23907762468535035,0.9412114014251781,0.7407004244631299,0.867486909862949,0.7918000467653645,Beat-level random split; patient-independent generalization is not established.
