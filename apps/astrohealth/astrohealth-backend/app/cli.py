@@ -51,7 +51,7 @@ def seed(days: int = 30) -> None:
             print("Crew already exists; seed skipped (idempotent)")
             return
         members = [
-            base(name=name, callsign=call, mission_id="ORBITAL-03")
+            base(name=name, callsign=call, mission_id="ORBITAL-03", is_demo=1)
             for name, call in zip(names, ["CDR", "PLT", "MED", "ENG", "SCI", "MSP"], strict=True)
         ]
         conn.execute(crew.insert(), members)
@@ -159,7 +159,7 @@ def simulator_tick() -> None:
     if settings.mode != "demo":
         raise RuntimeError("Simulator is forbidden outside demo mode")
     with engine.connect() as conn:
-        ids = list(conn.execute(select(crew.c.id)).scalars())
+        ids = list(conn.execute(select(crew.c.id).where(crew.c.is_demo == 1)).scalars())
     data = []
     for i, identifier in enumerate(ids):
         for metric, value, unit in [
@@ -231,7 +231,7 @@ def worker(name: str) -> None:
             conn.execute(
                 jobs.update().where(jobs.c.kind == name, jobs.c.status == "running").values(status="pending")
             )
-    if name == "ingestion-service" and settings.mode != "demo":
+    if name == "ingestion-service" and not (settings.mode == "demo" and settings.simulator_enabled):
         if sys.platform == "win32":
             asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
         asyncio.run(mqtt_loop())
@@ -277,7 +277,7 @@ def supervise() -> None:
             "--host",
             settings.bind_host,
             "--port",
-            str(settings.bind_port),
+            "8000",
         ],
         **{
             name: [sys.executable, "-m", "app.cli", "worker", name]
@@ -363,8 +363,6 @@ def main() -> None:
     elif args.command == "worker":
         worker(args.name)
     elif args.command == "serve":
-        if settings.mode == "demo":
-            seed()
         supervise()
     elif args.command == "backup":
         print(backup())

@@ -103,11 +103,12 @@ def ingest(items: list[Measurement], actor: str) -> list[str]:
 
 
 def latest(crew_id: str) -> list[dict[str, Any]]:
+    source_filter = "" if settings.show_demo_data else " AND source_type='measured'"
     with engine.connect() as conn:
         result = conn.execute(
             text("""SELECT * FROM (SELECT *,ROW_NUMBER() OVER
           (PARTITION BY metric ORDER BY ts_utc DESC,id DESC) AS rn FROM measurements
-          WHERE crew_id=:crew AND deleted_at IS NULL) WHERE rn=1"""),
+          WHERE crew_id=:crew AND deleted_at IS NULL""" + source_filter + ") WHERE rn=1"),
             {"crew": crew_id},
         ).mappings()
         return [
@@ -126,12 +127,13 @@ def recent_history(
     """Keep the newest bounded sample window, then restore chronological order."""
     if limit < 1:
         raise ValueError("History limit must be positive")
+    source_filter = "" if settings.show_demo_data else " AND source_type='measured'"
     rows = [
         dict(row)
         for row in conn.execute(
             text("""SELECT * FROM measurements WHERE crew_id=:crew
-              AND metric=:metric AND ts_utc>=:cutoff AND deleted_at IS NULL
-              ORDER BY ts_utc DESC,id DESC LIMIT :limit"""),
+              AND metric=:metric AND ts_utc>=:cutoff AND deleted_at IS NULL"""
+                 + source_filter + " ORDER BY ts_utc DESC,id DESC LIMIT :limit"),
             {"crew": crew_id, "metric": metric, "cutoff": cutoff, "limit": limit},
         ).mappings()
     ]

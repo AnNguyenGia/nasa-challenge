@@ -16,7 +16,7 @@ from app.cli import seed
 from app.core import crew, engine
 from sqlalchemy import select
 
-origin = {"Origin": "http://127.0.0.1:8002"}
+origin = {"Origin": "http://127.0.0.1:8000"}
 account = {"username": "medical", "password": "local-demo-pass-123"}
 with TestClient(app) as client:
     assert client.get("/api/v1/auth/setup-status").json() == {"required": True}
@@ -43,6 +43,23 @@ with TestClient(app) as client:
         "role": "Astronaut", "crew_id": crew_id,
     }
     med_auth = {"Authorization": "Bearer " + token}
+    assert client.get("/api/v1/crew", headers=med_auth).json() == []
+    simulated = {"crew_id": crew_id, "metric": "hr", "value": 78, "unit": "bpm", "source_type": "simulated"}
+    assert client.post("/api/v1/measurements", json=[simulated], headers=med_auth).status_code == 200
+    assert client.get("/api/v1/vitals/" + crew_id, headers=med_auth).json() == []
+    assert client.get("/api/v1/alerts?crew_id=" + crew_id, headers=med_auth).json() == []
+    real_profile = {"name": "Test Crew", "callsign": "TC-01", "mission_id": "TEST-MISSION"}
+    assert client.post("/api/v1/crew", json=real_profile).status_code == 401
+    created_crew = client.post("/api/v1/crew", json=real_profile, headers=med_auth)
+    assert created_crew.status_code == 201, created_crew.text
+    real_id = created_crew.json()["id"]
+    assert [row["id"] for row in client.get("/api/v1/crew", headers=med_auth).json()] == [real_id]
+    assert client.post("/api/v1/crew", json=real_profile, headers=med_auth).status_code == 409
+    measured = {"crew_id": real_id, "metric": "hr", "value": 71, "unit": "bpm", "source_type": "measured"}
+    assert client.post("/api/v1/measurements", json=[measured], headers=med_auth).status_code == 200
+    assert client.get("/api/v1/vitals/" + real_id, headers=med_auth).json()[0]["value"] == 71
+    history = client.get("/api/v1/vitals/" + real_id + "/history", headers=med_auth).json()
+    assert [point["value"] for point in history["points"]] == [71]
     assert client.post("/api/v1/auth/register", json=new_user).status_code == 401
     assert client.post("/api/v1/auth/register", json={**new_user, "crew_id": None}, headers=med_auth).status_code == 422
     registered = client.post("/api/v1/auth/register", json=new_user, headers=med_auth)
@@ -55,6 +72,7 @@ with TestClient(app) as client:
         "/api/v1/auth/login", json={"username": new_user["username"], "password": new_user["password"]}
     ).json()["access_token"]
     astro_auth = {"Authorization": "Bearer " + astronaut}
+    assert client.post("/api/v1/crew", json={**real_profile, "callsign": "TC-02"}, headers=astro_auth).status_code == 403
     assert client.post("/api/v1/auth/register", json={**new_user, "username": "astro3"}, headers=astro_auth).status_code == 403
     assert client.get("/api/v1/auth/accounts", headers=astro_auth).status_code == 403
     self_data = {
@@ -89,6 +107,8 @@ with TestClient(app) as client:
         **os.environ,
         "ASTRO_DATA_DIR": str(tmp_path),
         "ASTRO_MODE": "demo",
+        "ASTRO_SHOW_DEMO_DATA": "0",
+        "ASTRO_SIMULATOR_ENABLED": "0",
         "ASTRO_JWT_SECRET": "first-account-test-only-secret-32-chars",
         "PYTHONDONTWRITEBYTECODE": "1",
     }

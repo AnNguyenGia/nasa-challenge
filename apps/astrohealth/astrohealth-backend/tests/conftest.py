@@ -5,6 +5,8 @@ import time
 
 os.environ["ASTRO_DATA_DIR"] = tempfile.mkdtemp(prefix="astro-test-")
 os.environ["ASTRO_MODE"] = "demo"
+os.environ["ASTRO_SHOW_DEMO_DATA"] = "1"
+os.environ["ASTRO_SIMULATOR_ENABLED"] = "0"
 os.environ["ASTRO_JWT_SECRET"] = "tests-only-secret-32-characters-long"
 
 import pytest

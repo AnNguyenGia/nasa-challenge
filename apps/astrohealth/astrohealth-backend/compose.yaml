@@ -11,7 +11,7 @@ services:
       ASTRO_DB_KEY: ${ASTRO_DB_KEY:-}
       ASTRO_SYNC_KEY: ${ASTRO_SYNC_KEY:-}
       ASTRO_BIND_HOST: 0.0.0.0
-    ports: ["127.0.0.1:8002:8000"]
+    ports: ["127.0.0.1:8000:8000"]
     volumes: ["astro-data:/data"]
     networks: [local]
     restart: unless-stopped

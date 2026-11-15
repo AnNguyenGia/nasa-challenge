@@ -13,4 +13,4 @@ RUN useradd --create-home astro && mkdir -p /data && chown astro:astro /data
 USER astro
 ENV ASTRO_DATA_DIR=/data
 EXPOSE 8000
-CMD ["python","-m","app.cli","serve"]
+CMD ["sh","-c","alembic upgrade head && python -m app.cli serve"]

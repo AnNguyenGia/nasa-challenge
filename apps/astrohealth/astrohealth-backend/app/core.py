@@ -36,7 +36,8 @@ class Settings(BaseSettings):
     token_minutes: int = 15
     sync_key: str = ""
     bind_host: str = "127.0.0.1"
-    bind_port: int = 8000
+    show_demo_data: bool = False
+    simulator_enabled: bool = False
 
     @classmethod
     def settings_customise_sources(
@@ -113,7 +114,13 @@ sessions = table(
     Column("expires", Float),
     Column("revoked", Integer, default=0),
 )
-crew = table("crew_members", Column("name", String), Column("callsign", String), Column("mission_id", String))
+crew = table(
+    "crew_members",
+    Column("name", String),
+    Column("callsign", String),
+    Column("mission_id", String),
+    Column("is_demo", Integer, nullable=False, server_default="0"),
+)
 audit_log = table(
     "audit_log",
     Column("sequence", Integer, unique=True),

@@ -3,20 +3,36 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const http = require('http');
+const { pathToFileURL } = require('url');
 
 let mainWindow = null;
 let fallbackServer = null;
-const CONSOLE_PORT = 8002;
-const CONSOLE_URL = `http://127.0.0.1:${CONSOLE_PORT}`;
+let fallbackUrl = null;
+let backendPoll = null;
+const BACKEND_URL = 'http://127.0.0.1:8000';
+
+async function backendReady() {
+  try {
+    const response = await fetch(BACKEND_URL + '/health', { signal: AbortSignal.timeout(1500) });
+    return response.ok;
+  } catch { return false; }
+}
 
 function ensureServer(onReady) {
-  fetch(CONSOLE_URL + '/health', { signal: AbortSignal.timeout(1000) })
-    .then(r => r.ok ? onReady(CONSOLE_URL) : startFallbackServer(onReady))
-    .catch(() => startFallbackServer(onReady));
+  backendReady().then(ready => {
+    if (ready) { onReady(BACKEND_URL); return; }
+    startFallbackServer(onReady);
+    backendPoll = setInterval(async () => {
+      if (!await backendReady()) return;
+      clearInterval(backendPoll);
+      backendPoll = null;
+      if (mainWindow && !mainWindow.isDestroyed()) mainWindow.loadURL(BACKEND_URL).catch(console.error);
+    }, 3000);
+  });
 }
 
 function startFallbackServer(onReady) {
-  if (fallbackServer) return onReady(CONSOLE_URL);
+  if (fallbackServer && fallbackUrl) return onReady(fallbackUrl);
   const distDir = path.join(__dirname, 'dist');
   const mimeTypes = {
     '.html': 'text/html; charset=utf-8',
@@ -26,6 +42,7 @@ function startFallbackServer(onReady) {
     '.png': 'image/png',
     '.svg': 'image/svg+xml',
     '.woff2': 'font/woff2',
+    '.ttf': 'font/ttf',
     '.bin': 'application/octet-stream',
     '.gz': 'application/gzip'
   };
@@ -44,11 +61,12 @@ function startFallbackServer(onReady) {
     });
   });
   server.on('error', () => {
-    onReady(CONSOLE_URL);
+    onReady(pathToFileURL(path.join(distDir, 'index.html')).toString());
   });
-  server.listen(CONSOLE_PORT, '127.0.0.1', () => {
+  server.listen(0, '127.0.0.1', () => {
     fallbackServer = server;
-    onReady(CONSOLE_URL);
+    fallbackUrl = `http://127.0.0.1:${server.address().port}`;
+    onReady(fallbackUrl);
   });
 }
 
@@ -221,6 +239,11 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
+
+app.on('before-quit', () => {
+  if (backendPoll) clearInterval(backendPoll);
+  if (fallbackServer) fallbackServer.close();
 });
 
 app.on('activate', () => {

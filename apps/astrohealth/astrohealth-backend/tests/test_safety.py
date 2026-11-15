@@ -19,7 +19,7 @@ def test_self_registration_disabled_in_operational_mode(client, monkeypatch):
     response = client.post(
         "/api/v1/auth/self-register",
         json={"username": "unapproved", "display_name": "Unapproved", "password": "testing-pass-123"},
-        headers={"Origin": "http://127.0.0.1:8002"},
+        headers={"Origin": "http://127.0.0.1:8000"},
     )
     assert response.status_code == 403
 

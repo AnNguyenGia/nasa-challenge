@@ -6,6 +6,7 @@ import asyncio
 import hashlib
 import json
 import shutil
+import threading
 import time
 import unicodedata
 from contextlib import asynccontextmanager
@@ -52,6 +53,7 @@ from app.telemetry import Measurement, ingest, latest, lttb, recent_history
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     initialize()
+    _integrity_status()
     heartbeat("api-gateway")
     yield
 
@@ -67,10 +69,28 @@ app = FastAPI(
 P = "/api/v1"
 User = dict[str, Any]
 
+_integrity_lock = threading.Lock()
+_integrity_checked_at = 0.0
+_integrity_result: tuple[str, bool] = ("unchecked", False)
+
+
+def _integrity_status() -> tuple[str, bool]:
+    """Cache the expensive database and audit scan for one minute."""
+    global _integrity_checked_at, _integrity_result
+    with _integrity_lock:
+        if time.monotonic() - _integrity_checked_at < 60:
+            return _integrity_result
+        with engine.connect() as conn:
+            integrity = str(conn.exec_driver_sql("PRAGMA quick_check").scalar())
+            audit_ok = verify_audit(conn)
+        _integrity_result = (integrity, audit_ok)
+        _integrity_checked_at = time.monotonic()
+        return _integrity_result
+
 if settings.mode == "demo":
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["null", "http://127.0.0.1:8000", "http://127.0.0.1:8002"],
+        allow_origins=["null", "http://127.0.0.1:8000"],
         allow_methods=["GET", "POST", "PUT"],
         allow_headers=["Authorization", "Content-Type"],
     )
@@ -132,6 +152,12 @@ class SelfRegistration(BaseModel):
     password: str = Field(min_length=12, max_length=256)
 
 
+class CrewRegistration(BaseModel):
+    name: str = Field(min_length=1, max_length=80)
+    callsign: str = Field(min_length=1, max_length=20)
+    mission_id: str = Field(min_length=1, max_length=80)
+
+
 class Refresh(BaseModel):
     refresh_token: str = Field(max_length=200)
 
@@ -156,10 +182,7 @@ def setup_status() -> dict[str, bool]:
 def setup_first_account(data: FirstAccount, request: Request) -> dict[str, str]:
     if settings.mode != "demo":
         raise HTTPException(403, "First account setup is available only in local demo mode")
-    if request.headers.get("origin") not in {
-        "http://127.0.0.1:8000", "http://localhost:8000",
-        "http://127.0.0.1:8002", "http://localhost:8002",
-    }:
+    if request.headers.get("origin") not in {"http://127.0.0.1:8000", "http://localhost:8000"}:
         raise HTTPException(403, "Open the local AstroHealth app to create the first account")
     username = data.username.strip()
     if len(username) < 3:
@@ -189,10 +212,7 @@ def login(data: Login) -> dict[str, str]:
 def self_register(data: SelfRegistration, request: Request) -> dict[str, str]:
     if settings.mode != "demo":
         raise HTTPException(403, "Self-registration is available only for local demo profiles")
-    if request.headers.get("origin") not in {
-        "http://127.0.0.1:8000", "http://localhost:8000",
-        "http://127.0.0.1:8002", "http://localhost:8002",
-    }:
+    if request.headers.get("origin") not in {"http://127.0.0.1:8000", "http://localhost:8000"}:
         raise HTTPException(403, "Open the local AstroHealth app to register")
     username = data.username.strip()
     display_name = data.display_name.strip()
@@ -209,7 +229,7 @@ def self_register(data: SelfRegistration, request: Request) -> dict[str, str]:
             select(users.c.id).where(func.lower(users.c.username) == username.lower()).limit(1)
         ).first():
             raise HTTPException(409, "Username already exists")
-        profile = base(name=display_name, callsign="SELF-" + username[:20], mission_id="LOCAL-DEMO")
+        profile = base(name=display_name, callsign="SELF-" + username[:20], mission_id="LOCAL-DEMO", is_demo=1)
         conn.execute(crew.insert().values(**profile))
         row = base(
             username=username,
@@ -316,12 +336,37 @@ def password(data: Password, user: User = Depends(security.current)) -> dict[str
 @app.get(P + "/crew", tags=["Crew"])
 def list_crew(user: User = Depends(security.current)) -> list[dict[str, Any]]:
     with engine.connect() as conn:
-        rows = list(conn.execute(select(crew).where(crew.c.deleted_at.is_(None))).mappings())
-    if user["role"] == "Astronaut":
-        rows = [r for r in rows if r["id"] == user["crew_id"]]
+        query = select(crew).where(crew.c.deleted_at.is_(None))
+        if user["role"] == "Astronaut":
+            query = query.where(crew.c.id == user["crew_id"])
+        elif not settings.show_demo_data:
+            query = query.where(crew.c.is_demo == 0)
+        rows = list(conn.execute(query).mappings())
     if user["role"] == "Ground Control Operator":
         return [{"id": r["id"], "callsign": r["callsign"]} for r in rows]
     return [dict(r) for r in rows]
+
+
+@app.post(P + "/crew", status_code=201, tags=["Crew"])
+def create_crew(data: CrewRegistration, user: User = Depends(security.current)) -> dict[str, Any]:
+    security.medical(user)
+    name, callsign, mission_id = data.name.strip(), data.callsign.strip(), data.mission_id.strip()
+    if not all((name, callsign, mission_id)):
+        raise HTTPException(422, "Name, callsign and mission are required")
+    with transaction() as conn:
+        existing = conn.execute(
+            select(crew.c.id).where(
+                func.lower(crew.c.callsign) == callsign.lower(),
+                func.lower(crew.c.mission_id) == mission_id.lower(),
+                crew.c.deleted_at.is_(None),
+            ).limit(1)
+        ).first()
+        if existing:
+            raise HTTPException(409, "Callsign already exists in this mission")
+        row = base(name=name, callsign=callsign, mission_id=mission_id, is_demo=0)
+        conn.execute(crew.insert().values(**row))
+        audit(conn, user["id"], "crew_created", row["id"], {"mission_id": mission_id})
+    return row
 
 
 @app.post(P + "/measurements", tags=["Ingestion"])
@@ -411,6 +456,8 @@ def list_alerts(
     security.scope(user, crew_id)
     with engine.connect() as conn:
         stmt = select(alerts).where(alerts.c.crew_id == crew_id)
+        if not settings.show_demo_data:
+            stmt = stmt.where(alerts.c.source_type != "simulated")
         if status:
             stmt = stmt.where(alerts.c.status == status)
         rows = [
@@ -708,8 +755,8 @@ def retry(user: User = Depends(security.current)) -> dict[str, bool]:
 @app.get(P + "/health", tags=["System"])
 def health() -> dict[str, Any]:
     heartbeat("api-gateway")
+    integrity, audit_ok = _integrity_status()
     with engine.connect() as conn:
-        integrity = conn.exec_driver_sql("PRAGMA quick_check").scalar()
         services = {
             r[0]: {
                 "age_seconds": round(time.time() - r[1], 1),
@@ -718,7 +765,6 @@ def health() -> dict[str, Any]:
             }
             for r in conn.exec_driver_sql("SELECT * FROM service_heartbeats")
         }
-        audit_ok = verify_audit(conn)
     for name in [
         "ingestion-service",
         "alert-engine",

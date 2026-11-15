@@ -1,53 +1,50 @@
 # AstroHealth 3.0 — Local Flight Medical Console
 
-Ứng dụng Electron/FastAPI cục bộ được đưa vào `apps/astrohealth` trên branch tích hợp. Đây là bản demo kỹ thuật có kiểm thử, chưa phải phần mềm y tế được kiểm chứng. App React gốc trong `apps/desktop` vẫn chạy độc lập. AstroHealth dùng cổng **8002** để không xung đột với Edge backend cổng 8000 của repo này.
+Đã thay giao diện Electron cũ bằng bảng điều khiển buồng lái, đồng thời bổ sung backend FastAPI cục bộ. Đây là bản demo kỹ thuật có kiểm thử, chưa phải phần mềm y tế được kiểm chứng.
 
 ## Chạy bằng Docker
 
-Mở Docker Desktop, chờ Engine chạy. Trong thư mục ứng dụng AstroHealth, chạy:
+Mở Docker Desktop, chờ Engine chạy. Trong thư mục ứng dụng AstroHealth, chạy: 
 
 ```powershell
 .\run-docker.cmd start
 .\run-docker.cmd account medical
 ```
 
-Mở http://127.0.0.1:8002. Dùng `.\run-docker.cmd status`, `logs` hoặc `stop` để kiểm tra, xem log hoặc dừng. Docker volume giữ dữ liệu khi dừng. Cần Internet và vài GB dung lượng trống cho lần build đầu. Cấu hình Compose đã kiểm tra cú pháp; Docker Engine trên máy hiện chưa chạy nên chưa kiểm tra build thực tế.
+Mở http://127.0.0.1:8000. Dùng `.\run-docker.cmd status`, `logs` hoặc `stop` để kiểm tra, xem log hoặc dừng. Docker volume giữ dữ liệu khi dừng. Cần Internet và vài GB dung lượng trống cho lần build đầu. Cấu hình Compose đã kiểm tra cú pháp; Docker Engine trên máy hiện chưa chạy nên chưa kiểm tra build thực tế.
 
-## Chạy trên Windows
+## Chạy trên máy này
 
-Từ thư mục gốc của repo, vào `apps\astrohealth`. Cài dependency Node bằng `npm ci`. Mở terminal thứ nhất để chạy backend:
-
-```powershell
-cd .\apps\astrohealth
-.\start-local.ps1
-```
-
-Mở terminal thứ hai trong cùng thư mục để chạy Electron:
+Từ thư mục dự án `C:\Users\LENOVO\Documents\Codex\2026-11-14\t`:
 
 ```powershell
-cd .\apps\astrohealth
-npm ci
 npm start
 ```
 
-Electron mở console cục bộ khi backend đang chạy; nếu chưa có backend, mở bản mô phỏng tĩnh. Không giả lập trạng thái đã kết nối Trái Đất. Nhật ký demo tự nhập lưu trong trình duyệt, tách khỏi dữ liệu backend.
+Electron mở console cục bộ khi backend đang chạy; nếu chưa có backend, giao diện hiện trạng thái trống và chờ backend. Không tự hiển thị phi hành gia hoặc chỉ số sinh tồn mô phỏng. Nhật ký tự nhập được gắn nhãn nguồn riêng.
 
-Trong SYSTEM PAGES, AI/XAI chạy phép tính minh họa trên trình duyệt khi chưa đăng nhập và gắn `model_is_placeholder=true`; đăng nhập để chạy checkpoint ONNX trên backend. SYNC hiển thị trạng thái Ground và service từ `/health`; hàng đợi và nút retry cần tài khoản Medical Officer hoặc Ground Control Operator. REPORTS có thể xuất CSV mô phỏng, lưu event tự nhập trong trình duyệt và dùng **PRINT / SAVE PDF**. Trong Electron, nút PDF mở hộp thoại lưu tệp trực tiếp; trong trình duyệt, chọn **Save as PDF** trong hộp thoại in. Khi đăng nhập, PDF/CSV được tạo bởi report-service với dữ liệu theo quyền truy cập. Khởi động lại Electron sau khi cập nhật để nạp chức năng lưu PDF mới.
+Trong SYSTEM PAGES, AI/XAI chỉ chạy ví dụ kỹ thuật có nhãn `model_is_placeholder=true`; không có kết quả sức khỏe khi chưa có phép đo thực. SYNC hiển thị trạng thái Ground và service từ `/health`; hàng đợi và nút retry cần tài khoản Medical Officer hoặc Ground Control Operator. REPORTS chỉ có số liệu đo thực khi backend đã nhận dữ liệu. Trong Electron, nút PDF mở hộp thoại lưu tệp trực tiếp; trong trình duyệt, chọn **Save as PDF** trong hộp thoại in.
 
-Mở `http://127.0.0.1:8002`. Swagger offline tại `/docs`; bảng component tại `/design`. Dừng bằng Ctrl+C. Lần cài đặt đầu cần Internet để lấy dependency; khi chạy không cần Internet. Cần dung lượng trống cho thư viện, DB, WAL và bản sao lưu; nên dành ít nhất 1 GB trước khi bật mô phỏng liên tục.
+Khởi động cả backend và các worker:
+
+```powershell
+.\outputs\astrohealth\start-local.ps1
+```
+
+Mở `http://127.0.0.1:8000`. Swagger offline tại `/docs`; bảng component tại `/design`. Dừng bằng Ctrl+C. Lần cài đặt đầu cần Internet để lấy dependency; khi chạy không cần Internet. Cần dung lượng trống cho thư viện, DB, WAL và bản sao lưu; nên dành ít nhất 1 GB trước khi bật mô phỏng liên tục.
 
 Khi chưa có tài khoản, bấm **ĐĂNG NHẬP** trong giao diện để tạo tài khoản Medical Officer đầu tiên và tự đặt mật khẩu (ít nhất 12 ký tự). Tính năng này chỉ bật ở chế độ demo; các lần đăng nhập sau dùng tài khoản vừa tạo. Có thể tạo tài khoản qua terminal:
 
 ```powershell
-cd .\apps\astrohealth\astrohealth-backend
+cd .\outputs\astrohealth\astrohealth-backend
 .\.venv\Scripts\python.exe -m app.cli bootstrap medical
 ```
 
 CLI hỏi mật khẩu (tối thiểu 12 ký tự). Vai trò tùy chọn: `--role "Medical Officer"`, `Admin`, `Astronaut`, `"Ground Control Operator"`. Astronaut cần `--crew-id UUID` hiện có. Tạo Medical Officer thứ hai nếu cần phê duyệt rule.
 
-Sau khi tài khoản Medical Officer đầu tiên đã được tạo, người dùng có thể bấm **ĐĂNG KÝ** ngay trong app, nhập tên đăng nhập, tên hiển thị và mật khẩu, rồi được đăng nhập vào **hồ sơ demo cá nhân mới**. Hồ sơ này chưa có dữ liệu đo và không được xem dữ liệu của 6 phi hành gia có sẵn. Tự đăng ký chỉ hoạt động ở chế độ demo cục bộ.
+Sau khi tài khoản Medical Officer đầu tiên đã được tạo, người dùng có thể bấm **ĐĂNG KÝ** ngay trong app, nhập tên đăng nhập, tên hiển thị và mật khẩu, rồi được đăng nhập vào **hồ sơ demo cá nhân mới**. Hồ sơ này chưa có dữ liệu đo và không được xem dữ liệu của phi hành đoàn hiện hữu. Tự đăng ký chỉ hoạt động ở chế độ demo cục bộ.
 
-Medical Officer đăng nhập và mở **SYSTEM → TẠO TÀI KHOẢN** để cấp vai trò hoặc tạo tài khoản gắn với một thành viên phi hành đoàn hiện hữu. Chế độ vận hành chỉ cho phép cách này. Danh sách tài khoản trong SYSTEM không hiển thị mật khẩu. Mọi lần tạo tài khoản được ghi audit.
+Medical Officer đăng nhập và mở **SYSTEM → TẠO HỒ SƠ PHI HÀNH ĐOÀN** để thêm hồ sơ trống, rồi **TẠO TÀI KHOẢN** để cấp vai trò hoặc gắn Astronaut với hồ sơ. Chế độ vận hành chỉ cho phép Medical Officer cấp tài khoản. Danh sách tài khoản trong SYSTEM không hiển thị mật khẩu. Mọi lần tạo hồ sơ và tài khoản được ghi audit.
 
 Mở **SYSTEM → ĐỔI MẬT KHẨU** để thay mật khẩu; tất cả phiên cũ sẽ bị thu hồi.
 
@@ -63,7 +60,7 @@ Mở **SYSTEM → ĐỔI MẬT KHẨU** để thay mật khẩu; tất cả phi�
 - Parquet lưu ECG/EEG; checksum, kiểm tra crew/đồng hồ, ghi file tạm rồi đổi tên và dọn file nếu DB commit thất bại; DuckDB thống kê mẫu sóng. Ngoài demo, file Parquet được bọc AES-GCM trước khi ghi đĩa.
 - Lịch sử LTTB; tổng hợp theo giờ/ngày/tháng và nguồn; nhật ký giấc ngủ, dinh dưỡng, môi trường, lab/cognitive/questionnaire; báo cáo CSV/PDF có nguồn dữ liệu; trợ lý Việt/Anh theo luật, không dùng LLM.
 - Outbox Zstd + AES-GCM, ưu tiên cảnh báo, checksum, truyền từng gói 16 KiB, file-drop idempotent và mô phỏng mất liên lạc. Mặc định không gửi bundle; để kiểm thử file-drop, tạo file `data/sim-contact-enabled` trong chế độ demo.
-- Seed sáu phi hành gia, 30 ngày ở nhịp một giờ. Simulator chạy 1 Hz sau khi khởi động service. File/UDP/serial/BLE bridge sang MQTT có trong `app.adapters`; phần cứng thật chưa được thử.
+- Không seed hoặc phát dữ liệu mô phỏng khi khởi động. Dữ liệu demo cũ vẫn được giữ trong DB nhưng ẩn theo mặc định. Muốn chạy demo riêng, đặt `ASTRO_SHOW_DEMO_DATA=1`, `ASTRO_SIMULATOR_ENABLED=1` và chủ động chạy `python -m app.cli seed`; không dùng các cờ này khi theo dõi dữ liệu thật. File/UDP/serial/BLE bridge sang MQTT có trong `app.adapters`; phần cứng thật chưa được thử.
 - Sao lưu SQLite demo qua online backup; SQLCipher qua `sqlcipher_export`; tối đa bảy bản sao DB. Sóng Parquet cần được sao lưu cùng thư mục `data/waveforms` và bảo quản khóa riêng.
 
 ## Kiểm tra
@@ -86,10 +83,11 @@ Demo dùng SQLite thường và hiển thị `plaintext_demo`. Không được c
 
 Xem `astrohealth-backend/docs/DECISIONS.md` và `docs/IMPLEMENTATION_STATUS.md`. Ngưỡng đều là ví dụ. Mô hình chưa có kiểm chứng lâm sàng; không có chẩn đoán, chỉ định điều trị hoặc kết nối Ground thật. Chưa xác nhận an toàn vận hành, WCAG đầy đủ, 60 FPS trên phần cứng đích, cảnh báo <1 giây ở tải nhiệm vụ, SQLCipher Windows, Docker hoặc cảm biến thật. Một số bảng nghiệp vụ chuyên sâu hiện là schema mở rộng JSON có phiên bản, chưa hoàn chỉnh như hệ quản lý nhiệm vụ chuyên dụng.
 
-Bản tích hợp chỉ đưa vào mã và asset cần chạy. Thư mục `legacy/` với Human Atlas cũ không được đưa vào repo.
+Bản gốc được giữ ở thư mục `work/astrohealth-before` của chat sửa đổi; các asset UI cũ nằm trong `legacy/` của dự án và không được backend phục vụ.
 
 ## Mô hình người 3D cục bộ
 
 Dashboard hiển thị mô hình **Man** của mattmerk từ BlendSwap. Kéo chuột hoặc chạm để xoay, nhấp đúp để đặt lại góc nhìn; nút **MỞ RỘNG MÔ HÌNH 3D** mở toàn màn hình. Các điểm đánh dấu mở dữ liệu theo hệ cơ quan như trước. Mô hình chỉ minh họa hình thể tổng quát, không thể hiện nội tạng hoặc cấu trúc giải phẫu được kiểm chứng.
 
 Tệp `dist/assets/man.glb` được chuyển từ bản Blender gốc và được nạp hoàn toàn cục bộ. Mã bộ xem trong `src/man-viewer.js`; sau khi sửa, chạy `npm run build:model-viewer`. Nguồn và giấy phép CC BY-SA 3.0 nằm trong `dist/assets/MAN-ATTRIBUTION.md`. Phần mô hình chuyển đổi thuộc CC BY-SA 3.0, tách khỏi giấy phép mã ứng dụng.
+

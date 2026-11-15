@@ -1,5 +1,4 @@
 $ErrorActionPreference = 'Stop'
-$env:ASTRO_BIND_PORT = '8002'
 Set-Location -LiteralPath (Join-Path $PSScriptRoot 'astrohealth-backend')
 $pythonPath = Join-Path $PWD '.venv\Scripts\python.exe'
 if (-not (Test-Path -LiteralPath $pythonPath)) {
@@ -10,7 +9,6 @@ if (-not (Test-Path -LiteralPath $pythonPath)) {
 & $pythonPath -m alembic upgrade head
 if ($LASTEXITCODE -ne 0) { throw 'Migration failed' }
 & $pythonPath scripts\build_demo_models.py
-& $pythonPath -m app.cli seed
-Write-Host 'AstroHealth local console: http://127.0.0.1:8002 | API: /docs'
+Write-Host 'AstroHealth local console: http://127.0.0.1:8000 | API: /docs'
 Write-Host 'First account: .venv\Scripts\python.exe -m app.cli bootstrap medical'
 & $pythonPath -m app.cli serve

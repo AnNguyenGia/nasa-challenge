@@ -23,8 +23,8 @@ switch ($Action) {
         if ($LASTEXITCODE -ne 0) { throw 'Cấu hình Docker Compose không hợp lệ.' }
         & docker @composeArgs up --build -d
         if ($LASTEXITCODE -ne 0) { throw 'Không khởi động được AstroHealth.' }
-        Write-Host 'AstroHealth: http://127.0.0.1:8002'
-        Write-Host 'Swagger offline: http://127.0.0.1:8002/docs'
+        Write-Host 'AstroHealth: http://127.0.0.1:8000'
+        Write-Host 'Swagger offline: http://127.0.0.1:8000/docs'
         Write-Host 'Tạo tài khoản: .\run-docker.ps1 account medical'
     }
     'stop' {
