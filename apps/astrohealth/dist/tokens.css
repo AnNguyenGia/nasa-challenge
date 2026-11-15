@@ -1,0 +1,6 @@
+@font-face{font-family:B612;src:url('fonts/B612-Regular.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('fonts/IBMPlexMono-Regular.ttf') format('truetype');font-display:swap}
+:root{color-scheme:dark;--bg:#0e1114;--panel:#151a1f;--raised:#1c2229;--frame:#3b4652;--text:#d9dee3;--muted:#a0abb6;--normal:#64bd89;--watch:#e0a526;--warning:#ef7676;--info:#79bfd0;--unknown:#a0aab4;--label:'Times New Roman',Times,serif;--number:'Times New Roman',Times,serif;--touch:48px;--gap:10px;--radius:3px}
+[data-theme=night]{--bg:#10100f;--panel:#181715;--raised:#24211d;--frame:#4c463e;--text:#d1c6b2;--muted:#b2a58f;--normal:#9cb58b;--info:#a7b6af;--warning:#e19278;--watch:#d4b379}
+[data-theme=red]{--bg:#110a0a;--panel:#1c1010;--raised:#291717;--frame:#704343;--text:#f0aaaa;--muted:#c58d8d;--normal:#d99595;--watch:#f0aaaa;--warning:#ffb5b5;--info:#d99595;--unknown:#c58d8d}
+body.gloves{--touch:64px;--gap:14px}
