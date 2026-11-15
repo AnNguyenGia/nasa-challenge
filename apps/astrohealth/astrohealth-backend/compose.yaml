@@ -1,0 +1,28 @@
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: astrohealth-backend/Dockerfile
+    environment:
+      ASTRO_MODE: ${ASTRO_MODE:-demo}
+      ASTRO_MQTT_HOST: mqtt
+      ASTRO_DATA_DIR: /data
+      ASTRO_JWT_SECRET: ${ASTRO_JWT_SECRET:-}
+      ASTRO_DB_KEY: ${ASTRO_DB_KEY:-}
+      ASTRO_SYNC_KEY: ${ASTRO_SYNC_KEY:-}
+      ASTRO_BIND_HOST: 0.0.0.0
+    ports: ["127.0.0.1:8000:8000"]
+    volumes: ["astro-data:/data"]
+    networks: [local]
+    restart: unless-stopped
+  mqtt:
+    image: eclipse-mosquitto:2
+    volumes: ["./configs/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro"]
+    ports: ["127.0.0.1:1883:1883"]
+    networks: [local]
+    restart: unless-stopped
+networks:
+  local:
+    internal: true
+volumes:
+  astro-data:

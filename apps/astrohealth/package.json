@@ -1,0 +1,28 @@
+{
+  "name": "astrohealth",
+  "version": "3.0.0",
+  "description": "AstroHealth — Bio-Med Avionics Flight Medical Console Desktop Application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node scripts/check.cjs",
+    "backend": "powershell -NoProfile -File start-local.ps1",
+    "build:model-viewer": "esbuild src/man-viewer.js --bundle --minify --format=iife --outfile=dist/man-viewer.js"
+  },
+  "keywords": [
+    "avionics",
+    "telemetry",
+    "medical",
+    "aerospace",
+    "electron"
+  ],
+  "author": "Bio-Med Avionics Team",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "esbuild": "^0.28.2"
+  },
+  "dependencies": {
+    "three": "^0.187.0"
+  }
+}

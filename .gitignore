@@ -4,6 +4,7 @@ __pycache__/
 .pytest_cache/
 node_modules/
 dist/
+!apps/astrohealth/dist/
 release/
 data/
 models/

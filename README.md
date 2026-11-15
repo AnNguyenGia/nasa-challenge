@@ -4,6 +4,10 @@
 
 Template Ubuntu cho challenge “Create Health Monitoring Software for Astronauts on Space Missions”. Một backend Python/FastAPI chia module, chạy cùng code tại Edge và Cloud; không phải hệ thống microservice. Electron/React lưu dữ liệu offline trước khi gửi. Qwen chạy local qua Ollama. Pipeline Python tự train mô hình, quality gate, MLflow, promotion và rollback.
 
+## AstroHealth console trên branch tích hợp
+
+Bản AstroHealth cockpit/FastAPI đã được đưa vào [`apps/astrohealth`](apps/astrohealth/README.md) như một ứng dụng độc lập. Chạy Docker bằng `docker compose -f apps/astrohealth/astrohealth-backend/compose.yaml up -d --build` và mở `http://127.0.0.1:8002`. Trên Windows có thể dùng `apps\astrohealth\run-docker.cmd start` hoặc chạy Electron theo hướng dẫn của ứng dụng. Edge backend gốc vẫn dùng cổng 8000. Hai ứng dụng có cơ sở dữ liệu và API riêng; chưa có luồng chuyển dữ liệu giữa chúng.
+
 ## Chạy nhanh
 Yêu cầu: Ubuntu 22.04/24.04, Docker Engine + Compose v2, Node.js >=22.22.2 (xem `.nvmrc`), npm, Python 3.12 cho tests/ML local. Desktop cần phiên đồ họa Ubuntu và thư viện hệ thống Electron (GTK3, NSS, ALSA; Ubuntu 24.04 dùng các gói t64 tương ứng). Không chạy Electron bằng root hoặc `--no-sandbox`.
 

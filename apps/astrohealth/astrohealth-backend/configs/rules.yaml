@@ -1,0 +1,5 @@
+version: demo-1
+notice: "EXAMPLE ONLY — requires aerospace medical specialist approval. Not validated medical thresholds."
+rules:
+  - {id: DEMO-HR-HIGH-v1, metric: hr, direction: above, threshold: 120, clear: 110, duration_seconds: 3, min_quality: 0.8, level: Warning, approved_by: null}
+  - {id: DEMO-SPO2-LOW-v1, metric: spo2, direction: below, threshold: 90, clear: 93, duration_seconds: 0, min_quality: 0.8, level: Critical, approved_by: null}

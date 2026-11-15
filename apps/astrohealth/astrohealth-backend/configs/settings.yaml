@@ -1,0 +1,8 @@
+# Environment variables ASTRO_* override this file. No runtime Internet services.
+mode: demo
+show_demo_data: false
+simulator_enabled: false
+mqtt_host: 127.0.0.1
+mqtt_port: 1883
+mission_epoch: '2026-11-03T00:00:00+00:00'
+token_minutes: 15

@@ -1,0 +1,9 @@
+astrohealth-backend/.venv
+astrohealth-backend/data
+astrohealth-backend/.mypy_cache
+astrohealth-backend/.pytest_cache
+astrohealth-backend/.ruff_cache
+astrohealth-backend/.env
+**/__pycache__
+legacy
+node_modules
